@@ -212,6 +212,34 @@
     // Capture no button's initial position once the page loads
     window.addEventListener("load", () => {
       initialNoRect = noBtn.getBoundingClientRect();
+
+        document.addEventListener("pointermove", e => {
+        if (!initialNoRect || hintRevealed) return;
+
+        const b = initialNoRect;
+        const insideX = e.clientX >= b.left && e.clientX <= b.right;
+        const insideY = e.clientY >= b.top && e.clientY <= b.bottom;
+
+        // Reveal hint once on first hover
+        if (insideX && insideY) {
+          hintRevealed = true;
+          hint.classList.add("visible");
+        }
+    });
+
+    // Fallback for macOS
+    document.addEventListener("mousemove", e => {
+      if (!initialNoRect || hintRevealed) return;
+
+      const b = initialNoRect;
+      const insideX = e.clientX >= b.left && e.clientX <= b.right;
+      const insideY = e.clientY >= b.top && e.clientY <= b.bottom;
+
+      if (insideX && insideY) {
+        hintRevealed = true;
+        hint.classList.add("visible");
+      }
+    });
     });
 
     /* ---------- CONFETTI ---------- */
@@ -301,34 +329,6 @@
         (b.top + b.height / 2) - e.clientY
       );
       if (d < 140) moveNo(e.clientX, e.clientY);
-    });
-
-    document.addEventListener("pointermove", e => {
-        if (!initialNoRect || hintRevealed) return;
-
-        const b = initialNoRect;
-        const insideX = e.clientX >= b.left && e.clientX <= b.right;
-        const insideY = e.clientY >= b.top && e.clientY <= b.bottom;
-
-        // Reveal hint once on first hover
-        if (insideX && insideY) {
-          hintRevealed = true;
-          hint.classList.add("visible");
-        }
-    });
-
-    // Fallback for macOS
-    document.addEventListener("mousemove", e => {
-      if (!initialNoRect || hintRevealed) return;
-
-      const b = initialNoRect;
-      const insideX = e.clientX >= b.left && e.clientX <= b.right;
-      const insideY = e.clientY >= b.top && e.clientY <= b.bottom;
-
-      if (insideX && insideY) {
-        hintRevealed = true;
-        hint.classList.add("visible");
-      }
     });
          
     noBtn.addEventListener("click", e => e.preventDefault());
