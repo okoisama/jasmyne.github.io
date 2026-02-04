@@ -316,6 +316,20 @@
           hint.classList.add("visible");
         }
     });
+
+    // Fallback for macOS
+    document.addEventListener("mousemove", e => {
+      if (!initialNoRect || hintRevealed) return;
+
+      const b = initialNoRect;
+      const insideX = e.clientX >= b.left && e.clientX <= b.right;
+      const insideY = e.clientY >= b.top && e.clientY <= b.bottom;
+
+      if (insideX && insideY) {
+        hintRevealed = true;
+        hint.classList.add("visible");
+      }
+    });
          
     noBtn.addEventListener("click", e => e.preventDefault());
 
